@@ -1,151 +1,81 @@
 # OpsPilot — Operations Management Platform
 
-A role-based operations management backend for tracking, assigning, and executing work items across teams.
+OpsPilot is a **role-based operations management platform** that helps teams **assign, execute, and track internal work in real time**.
 
-Built with **Spring Boot 3**, secured with **JWT authentication**, and designed around a clear **Admin → Operator → Viewer** workflow.
+It’s designed for operational clarity: admins assign work, operators execute it, and stakeholders can follow progress through a consistent work-item lifecycle.
+
+---
+
+## Project Overview
+
+OpsPilot centralizes day-to-day operational tasks (“work items”) so teams can:
+- assign ownership clearly,
+- track status changes over time,
+- and understand what’s happening right now across the organization.
 
 ---
 
 ## Key Features
 
-- **JWT Authentication** — Stateless, token-based login and registration
-- **Role-Based Access Control** — Three distinct roles with scoped permissions
-- **Work Item Lifecycle** — Create, assign, track, and resolve operational tasks
-- **Admin Dashboard** — Aggregated metrics across all work items
-- **Pagination & Sorting** — Efficient data retrieval on all list endpoints
-- **Demo Data Seeding** — Pre-loaded employees and work items on startup
-- **Interactive API Docs** — Swagger UI via SpringDoc OpenAPI
+- **Admin task assignment** — admins can assign work items to operators
+- **Operator execution workflow** — operators work tasks and update status as progress changes
+- **Viewer visibility** — viewers can observe progress (read-only)
+- **Status lifecycle tracking** — work moves through defined states (`OPEN`, `IN_PROGRESS`, `COMPLETED`, `REJECTED`)
+- **Secure authentication** — JWT-based login with role-based access control
 
 ---
 
-## Role-Based Workflow
+## Roles
 
-| Role | Responsibilities |
-|------|-----------------|
-| **Admin** | Full access — create work items, assign to operators, view dashboard metrics, manage employees, load demo data |
-| **Operator** | Create and manage own work items, update statuses (Open → In Progress → Completed / Rejected) |
-| **Viewer** | Read-only visibility into the platform (future scope) |
+- **Admin** → Assigns work
+- **Operator** → Executes work
+- **Viewer** → Observes progress
 
-**Work Item Statuses:** `OPEN` → `IN_PROGRESS` → `COMPLETED` · `REJECTED`
+---
+
+## Workflow
+
+**Admin assigns → Operator executes → Status updates → Dashboard reflects**
+
+1. Admin creates/assigns a work item to an operator
+2. Operator works on the task and updates status as it progresses
+3. Status changes are reflected across the platform (including dashboard metrics)
 
 ---
 
 ## Tech Stack
 
-| Layer | Technology |
-|-------|-----------|
-| Framework | Spring Boot 3.5 |
-| Language | Java 21 |
-| Security | Spring Security + JWT (jjwt 0.12.6) |
-| Database | H2 in-memory (PostgreSQL-ready) |
-| ORM | Hibernate / Spring Data JPA |
-| API Docs | SpringDoc OpenAPI 2.7 |
-| Build | Maven |
-| Utilities | Lombok |
-
----
-
-## Getting Started
-
-### Prerequisites
-
-- Java 21+
-- Maven 3.6+
-
-### Run Locally
-
-```bash
-git clone <repository-url>
-cd opspilot-backend
-
-./mvnw spring-boot:run
-```
-
-The server starts at **http://localhost:8080**.
-
-| Resource | URL |
-|----------|-----|
-| API Base | `http://localhost:8080/api` |
-| Swagger UI | `http://localhost:8080/swagger-ui.html` |
-| H2 Console | `http://localhost:8080/h2-console` |
+- **Spring Boot** (Java)
+- **JWT Security** (Spring Security + stateless tokens)
+- **H2 Database** (in-memory for local/demo use)
 
 ---
 
 ## Demo Credentials
 
-The application seeds sample data automatically on startup.
+All demo users use the password: **`Password123`**
 
-**Default password for all users:** `Password123`
+- **Admin**
+  - Email: `admin1@opspilot.com`
+  - Password: `Password123`
 
-| Role | Email Pattern | Count |
-|------|--------------|-------|
-| Admin | `admin1@opspilot.com` – `admin5@opspilot.com` | 5 |
-| Operator | `operator1@opspilot.com` – `operator10@opspilot.com` | 10 |
-| Viewer | `viewer1@opspilot.com` – `viewer5@opspilot.com` | 5 |
+- **Operator**
+  - Email: `operator1@opspilot.com`
+  - Password: `Password123`
 
-Seeded data includes **20 employees** and **50 work items** in varied statuses.
+- **Viewer**
+  - Email: `viewer1@opspilot.com`
+  - Password: `Password123`
 
-### Quick Login
+---
+
+## Run Locally
 
 ```bash
-curl -X POST http://localhost:8080/api/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{"email": "admin1@opspilot.com", "password": "Password123"}'
+./mvnw spring-boot:run
 ```
 
-Use the returned `token` as `Authorization: Bearer <token>` on all protected endpoints.
+Server starts at: **http://localhost:8080**
 
----
-
-## API Overview
-
-### Public
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/api/health` | Health check |
-| `POST` | `/api/auth/register` | Register new employee |
-| `POST` | `/api/auth/login` | Login and receive JWT |
-
-### Authenticated — Admin & Operator
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `POST` | `/api/workitems` | Create a work item |
-| `GET` | `/api/workitems/my` | Get my work items |
-| `GET` | `/api/workitems/my/paginated` | Get my work items (paginated) |
-| `PUT` | `/api/workitems/{id}/status` | Update work item status |
-
-### Admin Only
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/api/admin/workitems` | All work items (paginated) |
-| `PUT` | `/api/admin/workitems/{id}/assign` | Assign work item to employee |
-| `GET` | `/api/admin/dashboard` | Dashboard metrics |
-| `GET` | `/api/admin/employees` | List employees (paginated) |
-| `GET` | `/api/admin/employees/operators` | List operators |
-| `GET` | `/api/admin/employees/{id}` | Get employee by ID |
-| `POST` | `/api/admin/demo-data/load` | Load additional demo data |
-
----
-
-## Project Structure
-
-```
-com.opspilot.platform/
-├── admin/controller/        Admin-only endpoints
-├── auth/controller/, dto/   Authentication & login DTOs
-├── common/controller/, dto/ Health check
-├── config/                  Security, OpenAPI, data seeding
-├── exception/               Global error handling
-├── security/                JWT filter, token provider, user details
-├── user/                    Employee entity, service, repository, DTOs
-└── workitem/                WorkItem entity, service, repository, DTOs
-```
-
----
-
-## License
-
-Proprietary — All rights reserved.
+- Swagger UI: `http://localhost:8080/swagger-ui.html`
+- Health check: `http://localhost:8080/api/health`
