@@ -24,3 +24,6 @@ management:
       exposure:
         include: health
 
+jwt:
+  secret: ${JWT_SECRET}
+  expiration: 86400000

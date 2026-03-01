@@ -25,8 +25,8 @@ server:
   port: 8080
 
 jwt:
-  # Externalized secret (must be provided in env as JWT_SECRET)
-  secret: ${JWT_SECRET}
+  # Dev default. In production, this is overridden by application-prod.yml using JWT_SECRET.
+  secret: ${JWT_SECRET:OpsPilotDevSecretKeyForJwtMustBeAtLeast32Chars}
   expiration: 86400000
 
 springdoc:
