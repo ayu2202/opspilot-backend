@@ -1,15 +1,10 @@
-# Use Java 17 base image
-FROM eclipse-temurin:17-jdk
+# Use Java 21
+FROM eclipse-temurin:21-jdk
 
-# Set working directory
 WORKDIR /app
 
-# Copy built jar
 COPY target/*.jar app.jar
 
-# Expose port
 EXPOSE 8080
 
-# Run app
 ENTRYPOINT ["java","-jar","/app/app.jar"]
-
