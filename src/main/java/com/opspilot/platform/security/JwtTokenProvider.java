@@ -30,7 +30,7 @@ public class JwtTokenProvider {
     private final long jwtExpirationMs;
 
     public JwtTokenProvider(
-            @Value("${jwt.secret:OpsPilotSecretKeyForJWTTokenGenerationMustBeLongEnough256Bits}") String secret,
+            @Value("${jwt.secret}") String secret,
             @Value("${jwt.expiration:86400000}") long jwtExpirationMs) {
         this.secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
         this.jwtExpirationMs = jwtExpirationMs;
@@ -159,4 +159,3 @@ public class JwtTokenProvider {
         }
     }
 }
-

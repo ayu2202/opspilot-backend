@@ -1,0 +1,43 @@
+spring:
+  application:
+    name: operations-core-service
+  profiles:
+    # Use SPRING_PROFILE env var for selection; default to 'dev'
+    active: ${SPRING_PROFILE:dev}
+  datasource:
+    url: jdbc:h2:mem:opspilot
+    driverClassName: org.h2.Driver
+    username: sa
+    password: ""
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+server:
+  port: 8080
+
+jwt:
+  # Externalized secret (must be provided in env as JWT_SECRET)
+  secret: ${JWT_SECRET}
+  expiration: 86400000
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health

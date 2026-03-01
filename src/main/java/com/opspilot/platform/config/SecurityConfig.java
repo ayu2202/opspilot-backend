@@ -94,6 +94,7 @@ public class SecurityConfig {
                         // Public endpoints
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/health").permitAll()
+                        .requestMatchers("/actuator/health").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
 
@@ -116,14 +117,22 @@ public class SecurityConfig {
     }
 
     /**
-     * Configure CORS to allow the frontend running on localhost:3000.
+     * Configure CORS to allow the frontend running on localhost:3000 and the deployed frontend from FRONTEND_URL env var.
      *
      * @return CorsConfigurationSource
      */
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:3000"));
+
+        String frontendUrl = System.getenv("FRONTEND_URL");
+        List<String> allowedOrigins = new java.util.ArrayList<>();
+        allowedOrigins.add("http://localhost:3000");
+        if (frontendUrl != null && !frontendUrl.isBlank()) {
+            allowedOrigins.add(frontendUrl);
+        }
+
+        configuration.setAllowedOrigins(allowedOrigins);
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
         configuration.setAllowCredentials(true);
@@ -133,4 +142,3 @@ public class SecurityConfig {
         return source;
     }
 }
-

@@ -130,6 +130,17 @@ public class AdminController {
     }
 
     /**
+     * Alias endpoint for demo data loading.
+     * Some clients may call /api/admin/demo-data instead of /api/admin/demo-data/load.
+     */
+    @PostMapping("/demo-data")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Load demo data (alias)", description = "Alias for /api/admin/demo-data/load (ADMIN only)")
+    public ResponseEntity<Map<String, Object>> loadDemoDataAlias() {
+        return loadDemoData();
+    }
+
+    /**
      * Load demo work items into the system.
      * Creates sample work items with varied statuses assigned to operators.
      *
@@ -152,4 +163,3 @@ public class AdminController {
         return ResponseEntity.ok(response);
     }
 }
-
