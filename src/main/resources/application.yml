@@ -22,7 +22,7 @@ spring:
       path: /h2-console
 
 server:
-  port: 8080
+  port: ${PORT:8080}
 
 jwt:
   # Dev default. In production, this is overridden by application-prod.yml using JWT_SECRET.

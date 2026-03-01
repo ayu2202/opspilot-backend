@@ -75,7 +75,7 @@ All demo users use the password: **`Password123`**
 ./mvnw spring-boot:run
 ```
 
-Server starts at: **http://localhost:8080**
+Server starts at: **http://localhost:${PORT:-8080}**
 
-- Swagger UI: `http://localhost:8080/swagger-ui.html`
-- Health check: `http://localhost:8080/api/health`
+- Swagger UI: `http://localhost:${PORT:-8080}/swagger-ui.html`
+- Health check: `http://localhost:${PORT:-8080}/api/health`

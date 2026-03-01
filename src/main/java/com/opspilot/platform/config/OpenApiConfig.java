@@ -20,7 +20,7 @@ import java.util.List;
 @Configuration
 public class OpenApiConfig {
 
-    @Value("${server.port:8080}")
+    @Value("${server.port}")
     private String serverPort;
 
     /**
@@ -68,4 +68,3 @@ public class OpenApiConfig {
                 .components(components);
     }
 }
-
