@@ -5,6 +5,6 @@ WORKDIR /app
 
 COPY target/*.jar app.jar
 
-EXPOSE 8080
+EXPOSE ${PORT}
 
-ENTRYPOINT ["java","-jar","/app/app.jar"]
+ENTRYPOINT ["sh","-c","java -jar /app/app.jar --server.port=${PORT}"]
