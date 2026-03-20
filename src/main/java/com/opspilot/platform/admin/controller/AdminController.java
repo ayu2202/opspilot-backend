@@ -49,8 +49,8 @@ public class AdminController {
      * @return page of WorkItemResponse
      */
     @GetMapping("/workitems")
-    @PreAuthorize("hasRole('ADMIN')")
-    @Operation(summary = "Get all work items (paginated)", description = "Retrieve paginated list of all work items (ADMIN only)")
+    @PreAuthorize("hasAnyRole('ADMIN', 'VIEWER')")
+    @Operation(summary = "Get all work items (paginated)", description = "Retrieve paginated list of all work items (ADMIN and VIEWER)")
     public ResponseEntity<Page<WorkItemResponse>> getAllWorkItems(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,

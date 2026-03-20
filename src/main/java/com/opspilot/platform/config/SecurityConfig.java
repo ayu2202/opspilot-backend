@@ -98,7 +98,10 @@ public class SecurityConfig {
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
 
-                        // Admin endpoints
+                        // Viewer read-only access to work items listing
+                        .requestMatchers(HttpMethod.GET, "/api/admin/workitems").hasAnyRole("ADMIN", "VIEWER")
+
+                        // Admin endpoints (all other /api/admin/**)
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
 
                         // Work items endpoints - ADMIN and OPERATOR
