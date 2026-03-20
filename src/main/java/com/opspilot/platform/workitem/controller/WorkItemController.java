@@ -74,7 +74,7 @@ public class WorkItemController {
      * @return list of work items
      */
     @GetMapping("/my")
-    @PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR', 'VIEWER')")
     @Operation(summary = "Get my work items", description = "Fetch all work items created by or assigned to current user")
     public ResponseEntity<List<WorkItemResponse>> getMyWorkItems(Authentication authentication) {
         String email = authentication.getName();
@@ -98,7 +98,7 @@ public class WorkItemController {
      * @return page of work items
      */
     @GetMapping("/my/paginated")
-    @PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR', 'VIEWER')")
     @Operation(summary = "Get my work items (paginated)", description = "Fetch work items with pagination support")
     public ResponseEntity<Page<WorkItemResponse>> getMyWorkItemsPaginated(
             @RequestParam(defaultValue = "0") int page,

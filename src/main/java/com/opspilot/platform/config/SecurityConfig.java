@@ -104,7 +104,8 @@ public class SecurityConfig {
                         // Admin endpoints (all other /api/admin/**)
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
 
-                        // Work items endpoints - ADMIN and OPERATOR
+                        // Work items endpoints - read access for all roles, write for ADMIN and OPERATOR
+                        .requestMatchers(HttpMethod.GET, "/api/workitems/**").hasAnyRole("ADMIN", "OPERATOR", "VIEWER")
                         .requestMatchers("/api/workitems/**").hasAnyRole("ADMIN", "OPERATOR")
 
                         // All other requests require authentication
@@ -136,8 +137,8 @@ public class SecurityConfig {
         }
 
         configuration.setAllowedOrigins(allowedOrigins);
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
-        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept", "Origin", "X-Requested-With"));
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
